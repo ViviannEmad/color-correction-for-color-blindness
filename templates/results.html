@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        Test Results
+    </header>
+    <div class="results-container">
+        <div class="box">
+            <h1 class="color-blindness-type"><strong>{{ color_blindness }}</strong></h1>
+            <p>You got {{ score }} out of {{ total }} correct!</p>
+            <a href="https://color-correction-omega.vercel.app/" target="_blank" class="external-link">Try color correction for colorblindness</a>
+            <br>
+            <a href="/" class="button">Restart Test</a>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorblindness Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        Colorblindness Test
+    </header>
+    <div class="main-container">
+        <div class="test-box">
+            <div id="plate-box" class="box">
+                <div id="plate-container">
+                    <img id="plate1" src="{{ url_for('static', filename='images/plate_(1).png') }}" alt="Ishihara Plate 1">
+                    <button type="button" id="next-button" class="action-button">Next</button>
+                    <button type="button" id="finish-button" class="action-button" style="display: none;">Finish</button>
+                </div>
+            </div>
+            <div class="keypad-box box">
+                <form id="test-form" action="/results" method="post">
+                    <label for="plate-answer">What number do you see?</label>
+                    <input type="text" id="plate-answer" name="plate_answer" placeholder="Enter the number" readonly>
+                    <div class="keypad">
+                        <button type="button" data-value="1">1</button>
+                        <button type="button" data-value="2">2</button>
+                        <button type="button" data-value="3">3</button>
+                        <button type="button" data-value="4">4</button>
+                        <button type="button" data-value="5">5</button>
+                        <button type="button" data-value="6">6</button>
+                        <button type="button" data-value="7">7</button>
+                        <button type="button" data-value="8">8</button>
+                        <button type="button" data-value="9">9</button>
+                        <button type="button" data-value="0">0</button>
+                        <button type="button" id="clear" class="wide">Clear</button>
+                        <button type="submit" id="submit-button" style="display: none;">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    let currentPlateIndex = 0;
+    const plates = [
+        "{{ url_for('static', filename='images/plate_(1).png') }}",
+        "{{ url_for('static', filename='images/plate_(2).png') }}",
+        "{{ url_for('static', filename='images/plate_(3).png') }}",
+        "{{ url_for('static', filename='images/plate_(4).png') }}",
+        "{{ url_for('static', filename='images/plate_(5).png') }}",
+        "{{ url_for('static', filename='images/plate_(6).png') }}",
+        "{{ url_for('static', filename='images/plate_(7).png') }}",
+        "{{ url_for('static', filename='images/plate_(8).png') }}",
+        "{{ url_for('static', filename='images/plate_(9).png') }}",
+        "{{ url_for('static', filename='images/plate_(10).png') }}",
+        "{{ url_for('static', filename='images/plate_(11).png') }}",
+        "{{ url_for('static', filename='images/plate_(12).png') }}",
+        "{{ url_for('static', filename='images/plate_(13).png') }}",
+        "{{ url_for('static', filename='images/plate_(14).png') }}",
+        "{{ url_for('static', filename='images/plate_(15).png') }}",
+        "{{ url_for('static', filename='images/plate_(16).png') }}",
+        "{{ url_for('static', filename='images/plate_(17).png') }}",
+        "{{ url_for('static', filename='images/plate_(18).png') }}",
+        "{{ url_for('static', filename='images/plate_(19).png') }}",
+        "{{ url_for('static', filename='images/plate_(20).png') }}",
+        "{{ url_for('static', filename='images/plate_(21).png') }}"
+    ];
+
+    const plateImage = document.getElementById('plate1');
+    const nextButton = document.getElementById('next-button');
+    const finishButton = document.getElementById('finish-button');
+    const plateAnswer = document.getElementById('plate-answer');
+    const testForm = document.getElementById('test-form');
+
+    nextButton.addEventListener('click', () => {
+        const currentAnswer = plateAnswer.value.trim();
+        if (currentAnswer) {
+            const inputField = document.createElement('input');
+            inputField.type = 'hidden';
+            inputField.name = `plate_answer${currentPlateIndex + 1}`;
+            inputField.value = currentAnswer;
+            testForm.appendChild(inputField);
+        }
+        currentPlateIndex++;
+        if (currentPlateIndex < plates.length) {
+            plateImage.src = plates[currentPlateIndex];
+            plateAnswer.value = '';  // Clear the input field for the new plate
+            if (currentPlateIndex === plates.length - 1) {
+                nextButton.style.display = 'none';
+                finishButton.style.display = 'block';
+            }
+        } else {
+            nextButton.style.display = 'none';
+            finishButton.style.display = 'block';
+        }
+    });
+
+    finishButton.addEventListener('click', () => {
+        const currentAnswer = plateAnswer.value.trim();
+        if (currentAnswer) {
+            const inputField = document.createElement('input');
+            inputField.type = 'hidden';
+            inputField.name = `plate_answer${currentPlateIndex + 1}`;
+            inputField.value = currentAnswer;
+            testForm.appendChild(inputField);
+        }
+        testForm.submit();
+    });
+
+    const keypadButtons = document.querySelectorAll('.keypad button[data-value]');
+    keypadButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            plateAnswer.value += button.getAttribute('data-value');
+        });
+    });
+
+    const clearButton = document.getElementById('clear');
+    clearButton.addEventListener('click', () => {
+        plateAnswer.value = '';
+    });
+    </script>
+</body>
+</html>
+
